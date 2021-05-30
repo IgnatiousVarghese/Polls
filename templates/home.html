@@ -1,0 +1,63 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+        <title>
+            {% block title %}
+            Polls
+            {% endblock %}
+        </title>
+        
+    </head>
+
+    <body>
+
+        <div class="sidenav">
+            <a href="/">Home</a>
+
+            {% if user.is_authenticated %}
+            <a href="{% url 'accounts:logout' %}">
+                logout
+            </a>
+
+            {% else %}
+            <a href="{% url 'accounts:register' %}">
+                register
+            </a>
+
+            <a href="{% url 'accounts:login' %}">
+                login
+            </a>
+
+            {% endif %}
+
+            {% block nav_questions %}
+
+            {% endblock %}
+        </div>
+
+        <div class="content">
+            <h2>Welcome!
+                {{ user.username|default:'Guest'}}
+            </h2>
+            {% block content %}
+          
+                You can poll here: <a href="{% url 'polls:index' %}">lets get started</a>
+            
+
+            {% endblock %}
+        </div>
+
+    </body>
+
+</html>
+
+
+
+
+

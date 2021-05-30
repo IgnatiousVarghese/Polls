@@ -1,0 +1,57 @@
+{% extends "polls/index.html" %}
+
+{% block nav_questions %} 
+
+    {% if questions %}
+    {% for question in questions %}
+    <p>
+        {{forloop.counter}}. <a class="ques" href="{% url 'polls:detail' question.id %}">
+            {{question.question_text}}
+        </a>
+    </p>
+    {% endfor %}
+
+    {% endif %}
+
+{% endblock %}
+
+
+{% block content %}
+    
+    <p>
+        {{question.question_text}}
+
+        {% if error_message %}
+        <span id="error">
+            {{error_message}}
+        </span>
+        {% endif %}
+
+        {% if choices %}
+
+    <form action="{% url 'polls:vote' question.id %}" method="post">
+        {% csrf_token %}
+
+        {% for choice in choices %}
+        <p>
+            <input type="radio" name="choice" id="choice_{{forloop.counter}}" value="{{choice.id}}">
+            <label for="choice_{{forloop.counter}}">
+                {{choice.choice_text}}
+            </label>
+        </p>
+        {% endfor %}
+        
+        <input id= "vote" type="submit" value="Vote">
+        
+    </form>
+    
+    <a href="{% url 'polls:index' %}">
+        <input  type="button" value="back">
+    </a>
+
+    {% else %}
+    <br> No choices present
+    {% endif %}
+    </p>
+
+{% endblock %}

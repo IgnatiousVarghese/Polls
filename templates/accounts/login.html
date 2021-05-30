@@ -1,0 +1,19 @@
+
+<form method="post" action="{% url 'accounts:login' %}">
+    {% csrf_token %}
+    <table>
+        {% for field in form %}
+
+        <tr>
+            {{field.errors }}
+            <td>{{ field.label }}</td>
+            <td>{{ field }}</td>
+        </tr>
+
+        {% endfor %}
+    </table>
+    <input type="submit" value="login" />
+</form>
+
+{# Assumes you setup the password_reset view in your URLconf #}
+{#<p><a href="{% url 'password_reset' %}">Lost password?</a></p>#}
