@@ -1,0 +1,135 @@
+*{ 
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Style the side navigation */
+.sidenav {
+	height: 100%;
+	width: 200px;
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	background-color: #111;
+	overflow-x: hidden;
+}
+
+
+/* Side navigation links */
+.sidenav a {
+	color: white;
+	padding: 16px;
+	text-decoration: none;
+	display: block;
+}
+
+/* Change color on hover */
+.sidenav a:hover {
+	background-color: #ddd;
+	color: black;
+}
+
+/* Style the content */
+.content {
+	margin-left: 200px;
+	padding-left: 20px;
+}
+
+.ques{
+	font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+header {
+	background: url('http://www.autodatz.com/wp-content/uploads/2017/05/Old-Car-Wallpapers-Hd-36-with-Old-Car-Wallpapers-Hd.jpg');
+	text-align: center;
+	width: 100%;
+	height: auto;
+	background-size: cover;
+	background-attachment: fixed;
+	position: relative;
+	overflow: hidden;
+	border-radius: 0 0 85% 85% / 30%;
+}
+header .overlay{
+	width: 100%;
+	height: 100%;
+	padding: 50px;
+	color: #FFF;
+	text-shadow: 1px 1px 1px #333;
+  background-image: linear-gradient( 135deg, #9f05ff69 10%, #fd5e086b 100%);
+	
+}
+
+h1 {
+	font-family: 'Dancing Script', cursive;
+	font-size: 80px;
+	margin-bottom: 30px;
+}
+
+h3 {
+	font-family: 'Open Sans', sans-serif;
+	margin-bottom: 30px;
+}
+
+button {
+	border: none;
+	outline: none;
+	padding: 10px 20px;
+	border-radius: 50px;
+	color: #333;
+	background: #fff;
+	margin-bottom: 50px;
+	box-shadow: 0 3px 20px 0 #0000003b;
+}
+button:hover{
+	cursor: pointer;
+}
+
+li a{
+    color: brown;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+body{
+    background-image: url("images/background.jpg") ;
+}
+p {
+	text-align: left;
+	margin-left: 10%;
+}
+a{
+	text-decoration: none;
+}
+
+#error {
+	color: red;
+}
+.choice{
+	background-color: rgba(54, 197, 54, 0.541);
+	border-radius: 15%;
+	width: fit-content;
+}
+.counter {
+	width: fit-content;
+	height: fit-content;
+	border-radius: 15%;
+	-webkit-animation: NAME-YOUR-ANIMATION 1s infinite;  /* Safari 4+ */
+	-moz-animation: NAME-YOUR-ANIMATION 1s infinite;  /* Fx 5+ */
+	-o-animation: NAME-YOUR-ANIMATION 1s infinite;  /* Opera 12+ */
+	animation: NAME-YOUR-ANIMATION 1s infinite;  /* IE 10+, Fx 29+ */
+	position: relative;
+	left: 10px;
+  }
+  
+  @-webkit-keyframes NAME-YOUR-ANIMATION {
+	0%, 49% {
+	  background-color: rgb(241, 23, 8);
+	}
+	50%, 100% {
+	  background-color: #d8f790;
+	}
+  }

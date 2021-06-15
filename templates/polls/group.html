@@ -1,0 +1,62 @@
+{% extends "home.html" %}
+{% load static %}
+
+{% block style %}
+
+<link rel="stylesheet" href="{% static 'polls/style.css' %}">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+{% endblock style %}
+
+{% block title %}
+Groups
+{% endblock %}
+
+{% block content %}
+
+<script>
+
+    
+    
+</script>
+
+{% if groups %}
+<h4>
+    Poll Groups: 
+
+    <a href="{% url 'polls:edit' %}">
+        <i class="material-icons">
+            edit
+        </i>
+    </a>
+
+</h4>
+{% for group in groups %}
+
+<div class="row">
+    <div class="groups">
+
+        <a href="{% url 'polls:index' group.group_name %}">
+
+            {{forloop.counter}}.{{group.group_name}}
+
+        </a>
+
+        
+
+    </div>
+</div>
+
+
+{% endfor %}
+
+{% else %}
+<p style="text-align: center;">
+    No questions present
+</p>
+
+{% endif %}
+
+
+{% endblock %}

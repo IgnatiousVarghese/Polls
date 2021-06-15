@@ -1,91 +1,90 @@
 {% extends "home.html" %}
 
+{% load static %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'polls/style.css' %}">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+{% endblock style %}
+
 {% block content %}
 
-    <style>
-        p {
-            text-align: left;
-            margin-left: 10%;
+<script>
+    function end_poll(group_name)
+    {
+        if(confirm("Press OK to clear all selected choices"))
+        {
+            window.location = "{% url 'polls:result' group.group_name %}";
         }
-        a{
-            text-decoration: none;
+    }
+    function clear_poll(group_name)
+    {
+        if(confirm("Press OK to clear all selected choices"))
+        {
+            window.location = "{% url 'polls:clear_poll' group.group_name %}";
         }
+    }
+</script>
 
-        #error {
-            color: red;
-        }
-        .choice{
-            background-color: rgba(54, 197, 54, 0.541);
-            border-radius: 15%;
-            width: fit-content;
-        }
-        .counter {
-            width: fit-content;
-            height: fit-content;
-            border-radius: 15%;
-            -webkit-animation: NAME-YOUR-ANIMATION 1s infinite;  /* Safari 4+ */
-            -moz-animation: NAME-YOUR-ANIMATION 1s infinite;  /* Fx 5+ */
-            -o-animation: NAME-YOUR-ANIMATION 1s infinite;  /* Opera 12+ */
-            animation: NAME-YOUR-ANIMATION 1s infinite;  /* IE 10+, Fx 29+ */
-          }
-          
-          @-webkit-keyframes NAME-YOUR-ANIMATION {
-            0%, 49% {
-              background-color: rgb(241, 23, 8);
-            }
-            50%, 100% {
-              background-color: #d8f790;
-            }
-          }
+{% if votes %}
 
-    </style>
-    {% if votes %}
+<h4>
+    You have voted for following quetsions:
+    <span class="counter">
+        {{votes|length}}/{{questions|length}}
+    </span>
+</h4>
+{% for vote in votes %}
+<p>
+    {{forloop.counter}}.{{vote.question}} <span class="choice"> {{vote.choice}} </span>
+</p>
+{% endfor %} {% else %}
+<h4>
+    you haven't voted yet
+</h4>
+{% endif %}
+
+<div class="row">
+    <div class="column main">
 
         <h4>
-            You have voted for following quetsions: 
-            <span class="counter">
-                {{votes|length}}/{{questions|length}}
-            </span>
+            {{group.group_name}}: 
+
         </h4>
-        {% for vote in votes %}
-            <p>
-                {{forloop.counter}}.{{vote.question}} <span class="choice"> {{vote.choice}} </span>
-            </p>
+        
+        {% if questions %}
+        {% for question in questions %}
+        <p>
+            {{forloop.counter}}. <a class="ques" href="{% url 'polls:detail' group.group_name question.id %}">
+                {{question.question_text}}
+            </a>
+        </p>
         {% endfor %}
+        <p>
+            <input type="button" value="end poll" onclick="end_poll('{{group.group_name}}')">
 
-    {% else %}
-        <h4>
-            you haven't voted yet
-        </h4>
-    {% endif %}
+            <input type="button" value="clear poll" onclick="clear_poll('{{group.group_name}}')">
 
+        </p>
+            {% else %}
+            <p style="text-align: center;">
+                No questions present
+            </p>
 
-    {% if questions %}
-    <h4>
-        Questions:
-    </h4>
-    {% for question in questions %}
-    <p>
-        {{forloop.counter}}. <a class="ques" href="{% url 'polls:detail' question.id %}">
-            {{question.question_text}}
-        </a>
-    </p>
-    {% endfor %}
-    <p>
-        <a href="{% url 'polls:result' %}">
-            <input type="button" value="end poll">
-        </a>
-        <a href="{% url 'polls:clear_poll' %}">
-            <input type="button" value="clear poll">
-        </a>
-    </p>
-    {% else %}
-    <p style="text-align: center;">
-        No questions present
-    </p>
+            {% endif %}
+    </div>
 
-    {% endif %}
-
-    
-
+    <div class="column side">
+        <div class="row">
+            {% for question in questions %}
+            <div class="colum_side_box">
+                <a href="{% url 'polls:detail' group.group_name question.id %}">{{forloop.counter}}
+                    <!--.{{question.question_text}}--></a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock %}

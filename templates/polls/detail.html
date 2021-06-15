@@ -1,57 +1,87 @@
-{% extends "polls/index.html" %}
-
-{% block nav_questions %} 
-
-    {% if questions %}
-    {% for question in questions %}
-    <p>
-        {{forloop.counter}}. <a class="ques" href="{% url 'polls:detail' question.id %}">
-            {{question.question_text}}
-        </a>
-    </p>
-    {% endfor %}
-
-    {% endif %}
-
-{% endblock %}
-
-
+{% extends "home.html" %}
 {% block content %}
-    
-    <p>
-        {{question.question_text}}
 
-        {% if error_message %}
-        <span id="error">
-            {{error_message}}
-        </span>
-        {% endif %}
+<script>
+    function check_func(choice_id, ele_id, voted_id) {
+        var x = document.getElementById(ele_id);
+        if (choice_id == voted_id) {
+            x.checked = "checked";
+        }
+    }
 
-        {% if choices %}
+    function check_selected(q_no)
+    {
+        var  x = document.getElementById(q_no);
+        x.style.backgroundColor = "green";
+    }
 
-    <form action="{% url 'polls:vote' question.id %}" method="post">
-        {% csrf_token %}
+</script>
+<h4>
+    You are attempting the poll : {{group.group_name}}
+</h4>
+<div class="row">
+    <div class="column main">
 
-        {% for choice in choices %}
         <p>
-            <input type="radio" name="choice" id="choice_{{forloop.counter}}" value="{{choice.id}}">
-            <label for="choice_{{forloop.counter}}">
-                {{choice.choice_text}}
-            </label>
-        </p>
-        {% endfor %}
-        
-        <input id= "vote" type="submit" value="Vote">
-        
-    </form>
-    
-    <a href="{% url 'polls:index' %}">
-        <input  type="button" value="back">
-    </a>
+            {{q_no}}).
+            {{question.question_text}} {% if error_message %}
+            <div id="error">
+                {{error_message}}
+            </div> {% endif %} {% if choices %}
 
-    {% else %}
-    <br> No choices present
-    {% endif %}
-    </p>
+            <form action="{% url 'polls:vote' group.group_name question.id %}" method="post">
+                {% csrf_token %} {% for choice in choices %}
+                <p>
+                    <input type="radio" name="choice" id="choice_{{forloop.counter}}" value="{{choice.id}}">
+                    <label for="choice_{{forloop.counter}}">
+                        {{choice.choice_text}}
+                    </label>
+
+
+                    {% if voted %}
+                    <script>
+                        check_func( "{{choice.id}}", "choice_{{forloop.counter}}", "{{voted.choice.id}}" )
+                        
+                    </script>
+
+                    {% endif %}
+
+                </p>
+                {% endfor %}
+
+                <input id="vote" type="submit" value="Vote">
+
+            </form>
+
+            <a href="{% url 'polls:index' group.group_name %}">
+                <input type="button" value="back">
+            </a>
+
+
+            {% else %}
+            <br> No choices present {% endif %}
+        </p>
+    </div>
+    <div class="column side">
+        <div class="row">
+            {% for question in questions %}
+
+            <a href="{% url 'polls:detail' group.group_name question.id %}">
+                <div class="colum_side_box" id="{{forloop.counter}}">{{forloop.counter}}
+                    <!--.{{question.question_text}}-->
+
+                </div>
+            </a>
+
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
+
+<script>
+    check_selected( "{{q_no}}");
+</script>
+
 
 {% endblock %}

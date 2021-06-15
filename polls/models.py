@@ -5,7 +5,8 @@ from django.contrib.auth.models import User
 
 class Questiongroup(models.Model):
     group_name = models.CharField(max_length = 100)
-    pub_date = models.DateTimeField('published date', auto_now_add= True, null=True)
+    pub_date = models.DateTimeField('published date', auto_now_add= True)
+    
     def __str__(self):
         return self.group_name
 

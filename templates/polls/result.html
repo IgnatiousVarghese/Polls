@@ -1,26 +1,28 @@
 {% extends "home.html" %}
 
 {% block content %}
-    
+<style>
+    happy{
+        b
+    }
+</style>
+<p>
+    {% for q in questions %}
+<h4>
+    {{q.question_text}}
+    <br>
+    {% for c in q.choice_set.all %}
     <p>
-
-        {% for q in questions %}
-        <h4>
-            {{q.question_text}}
-            <br>
-            {% for c in q.choice_set.all %} 
-            <p>
-                {{c.choice_text}}
-                <span class="counter">
-                    {{c.vote_set.all.count}}
-                </span>
-            </p>
-            {% endfor %}
-
-        </h4>
-        {% endfor %}
-
+        {{c.choice_text}}
+        <span class="counter">
+            {{c.vote_set.all.count}}
+        </span>
     </p>
+    {% endfor %}
+
+</h4>
+{% endfor %}
+
+</p>
 
 {% endblock %}
-
