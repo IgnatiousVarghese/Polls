@@ -1,28 +1,102 @@
 {% extends "home.html" %}
 
+{% block title %}
+Result {{group.group_name}}
+{% endblock %}
+
+{% block style %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+{% endblock %}
+
 {% block content %}
-<style>
-    happy{
-        b
-    }
-</style>
-<p>
-    {% for q in questions %}
-<h4>
-    {{q.question_text}}
-    <br>
-    {% for c in q.choice_set.all %}
-    <p>
-        {{c.choice_text}}
-        <span class="counter">
-            {{c.vote_set.all.count}}
-        </span>
-    </p>
+
+<div class="jumbotron text-center">
+
+    <h1 class="display-5 fw-bold text-dark text-center ">
+        {{group.group_name|capfirst}}
+    </h1>
+    <h4 class="text-dark text-muted">result!</h4>
+
+</div>
+
+<div id="accordion" class="text-center m-5">
+    {% for q_result in content %}
+
+    <div class="card mx-5 my-1 ">
+        <div class="card-header" id="heading_{{forloop.counter}}">
+            <h2 class="mb-0">
+                <button class="btn btn-outline-primary text-center" type="button" data-toggle="collapse"
+                    data-target="#question_{{forloop.counter}}" aria-expanded="false" aria-controls="collapseOne">
+                    {{q_result.question_text}}
+                </button>
+            </h2>
+        </div>
+
+        <div id="question_{{forloop.counter}}" class="collapse" aria-labelledby="#heading_{{forloop.counter}}"
+            data-parent="#accordion">
+            <div class="card-body">
+                <canvas id="myChart{{forloop.counter}}"></canvas>
+                <script>
+
+                    var data = {{q_result.count|safe}};
+                    var sum = 0;
+                    for (let i = 0; i < data.length; i++) 
+                    {
+                        sum += data[i];
+                    }
+            
+                    var count_not_voted = {{total_users_voted|safe}} - sum;
+            
+                    var labels = {{q_result.labels|safe}};
+                    labels.push("None");
+                    data.push(count_not_voted);
+            
+                    var color_list = [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ];
+            
+                    var l = labels.length -1;
+                    color_list[l] = 'grey'
+            
+                    var my_choice = "Your choice : {{q_result.my_vote|safe|escapejs}}";
+            
+            
+                    var ctx = document.getElementById('myChart{{forloop.counter}}').getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: '# of Votes',
+                                data: data,
+                                backgroundColor: color_list,
+                                borderColor: color_list,
+                                borderWidth: 2
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            title: {
+                                display: true,
+                                text: my_choice
+                            }
+                        }
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+
     {% endfor %}
+</div>
 
-</h4>
-{% endfor %}
 
-</p>
 
 {% endblock %}

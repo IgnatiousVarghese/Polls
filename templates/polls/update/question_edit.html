@@ -10,7 +10,7 @@
 {% endblock style %}
 
 {% block title %}
-Edit Groups
+Edit {{q.question_text}}
 {% endblock %}
 
 {% block content %}
@@ -21,23 +21,20 @@ Edit Groups
 
 </script>
 
-{% if groups %}
-<h4>
-    Poll Groups:
+{% if choices %}
 
+<h4>
+    Edit {{q.question_text}}
 </h4>
-{% for group in groups %}
+
+{% for choice in choices %}
 
 <div class="row">
     <div class="groups">
 
-        <a href="{% url 'polls:group_edit' group.group_name %}">
+            {{choice.choice_text}}
 
-            {{forloop.counter}}.{{group.group_name}}
-
-        </a>
-
-        <a href="{% url 'polls:group_rename' group.group_name %}">
+        <a href="{% url 'polls:choice_edit' group.group_name question.id choice.id%}">
             <i class="material-icons">
                 edit
             </i>
@@ -56,5 +53,12 @@ Edit Groups
 
 {% endif %}
 
+<div class="add">
+    <a href="{% url 'polls:add_choice' group.group_name question.id %}">
+
+        <i class="far fa-plus-square" style="font-size: 200%;"></i>
+
+    </a>
+</div>
 
 {% endblock %}

@@ -4,63 +4,100 @@
 <html lang="en">
 
 <head>
+    <title>
+        {% block title %} Home {% endblock %}
+    </title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/polls/style.css' %}">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <link rel="stylesheet" href="{% static 'style.css' %}">
     {% block style %}
     {% endblock style %}
-
-    <title>
-        {% block title %} Polls {% endblock %}
-    </title>
 
 </head>
 
 <body>
 
-    <div id="navbar">
-        <a class="active" href=" / ">Home</a> {% if user.is_authenticated %}
-        <div class="ele">
-            Welcome {{ user.username|default:'Guest'}}!
+    <nav class="navbar navbar-expand-md bg-dark navbar-dark  align-middle">
+        <a class="navbar-brand active" href="/">Home</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+
+                {% if user.is_authenticated %}
+
+                <li class="nav-item">
+                    <div class="nav-link">Welcome {{ user.username|default:'Guest'}}!</div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'accounts:logout' %} ">
+                        logout
+                    </a>
+                </li>
+
+                {% else %}
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'accounts:register' %} ">
+                        Register
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'accounts:login' %} ">
+                        Login
+                    </a>
+                </li>
+
+                {% endif %}
+
+            </ul>
         </div>
-        <a href="{% url 'accounts:logout' %} ">
-            logout
-        </a> {% else %}
-        <a href="{% url 'accounts:register' %} ">
-            register
-        </a>
 
-        <a href="{% url 'accounts:login' %} ">
-            login
-        </a> {% endif %} {% block nav_questions %} {% endblock %}
+        <div class="nav-pill ml-4">
+            <a href="../" type="button" class="px-2 py-2 mt-1 btn btn-secondary">
+                <i class="bi bi-chevron-double-left align-middle">
+                </i>
+                back
+            </a>
+        </div>
+
+    </nav>
+
+
+
+    {% block content %}
+    <div class="px-4 py-5 my-5 text-center">
+        <img class="d-block mx-auto mb-4" src="{% static 'images/ballot.png' %}" alt="Poll" width="60" height="57">
+        <h1 class="display-5 fw-bold">
+            <a href="{% url 'polls:group' %} " type="button" class="btn btn-primary btn-lg px-4 gap-3">
+                Poll
+            </a>
+        </h1>
+        <div class="col-6 mx-auto">
+            <p class="lead mb-1">
+                Attempts premade questions in any group and view result as its owner ends the poll
+            </p>
+            <p class="lead mb-1">
+                OR
+            </p>
+            <p class="lead mb-4">
+                Make your your your own groups and questions.
+            </p>
+        </div>
     </div>
 
-    <div class="content ">
-        {% block content %} You can poll here: <a href="{% url 'polls:group' %} ">lets get started</a>
-        {% endblock %}
-    </div>
+    {% endblock %}
 
-
-    <script>
-        
-        window.onscroll = function () {
-            myFunction()
-        };
-
-        var navbar = document.getElementById("navbar");
-        var sticky = navbar.offsetTop;
-
-        function myFunction() {
-            if (window.pageYOffset >= sticky) {
-                navbar.classList.add("sticky")
-            } else {
-                navbar.classList.remove("sticky");
-            }
-        }
-
-    </script>
 </body>
 
 </html>

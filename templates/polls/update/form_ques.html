@@ -1,0 +1,8 @@
+<form action="{% url 'polls:question_change' group_name q_id %}" method="post">
+
+    {% csrf_token %}
+
+    {{form}}
+
+    <button type="submit">submit</button>
+</form>

@@ -13,15 +13,18 @@ def register(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             c_password = form.cleaned_data['c_password']
-            if c_password == password:
+            if User.objects.filter(username= username).exists():
+                form.add_error('username' ,  "username already taken")
+            elif c_password == password:
                 user = User(username=username)
                 user.set_password(password)
                 user.save()
-
                 return redirect('accounts:login')
-            else:
-                form.add_error(field='password', error="password mismatch!!")
 
+            else:
+                form.add_error(field='c_password', error="password mismatch!!")
+        else:
+            form.add_error(None, "username already taken")
     content = {
         'form': form
     }
@@ -29,6 +32,7 @@ def register(request):
 
 
 def login(request):
+    form = Loginform()
     if request.method == 'POST':
         form = Loginform(request.POST)
         if form.is_valid():
@@ -40,8 +44,7 @@ def login(request):
                 return render(request, 'home.html')
             else:
                 form.add_error('password', "incorrect username or password")
-    else:
-        form = Loginform()
+    
     context = {
         'form': form
     }

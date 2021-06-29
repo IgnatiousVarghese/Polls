@@ -3,7 +3,6 @@
 
 {% block style %}
 
-<link rel="stylesheet" href="{% static 'polls/style.css' %}">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
 
@@ -15,48 +14,79 @@ Groups
 
 {% block content %}
 
-<script>
-
-    
-    
-</script>
 
 {% if groups %}
-<h4>
-    Poll Groups: 
+<div class="container">
+    <h1 class="px-2 py-2 m-3 display-5 fw-bold bg-light text-dark text-center">
+        Poll Groups
+    </h1>
+</div>
 
-    <a href="{% url 'polls:edit' %}">
-        <i class="material-icons">
-            edit
-        </i>
-    </a>
-
-</h4>
 {% for group in groups %}
 
-<div class="row">
-    <div class="groups">
+<div class="row text-center">
+    <div class="mx-auto my-1" >
+        {% if not group.is_ongoing %}
 
-        <a href="{% url 'polls:index' group.group_name %}">
+        <a class="my-2 mx-1" href="{% url 'polls:result' group.group_name %}">
+            <button type="button" class="btn btn-outline-secondary" >
+                {{forloop.counter}}. {{group.group_name}}
 
-            {{forloop.counter}}.{{group.group_name}}
+                <img src="{% static 'images/polling.png' %}" style="height: 1.5em; vertical-align: top;" alt="(result)">
 
+            </button>
         </a>
 
-        
+        {% if group.owner == user or user.is_superuser %}
+        <a class="my-2 mx-1 endpoll" href="{% url 'polls:startpoll' group.group_name %}" >
+            <button type="button" class="btn btn-success ml-1">Open group</button>
+        </a>
+        {% endif %}
 
+        {% else %}
+
+        <a class="my-2 mx-1 groups" href="{% url 'polls:index' group.group_name %}" >
+            <button type="button" class="btn btn-outline-success">
+                {{forloop.counter}}. {{group.group_name}}
+            </button>
+        </a>
+
+        {% if group.owner == user or user.is_superuser %}
+        <a class="my-2 mx-1 endpoll" href="{% url 'polls:endpoll' group.group_name %}" >
+            <button type="button" class="btn btn-danger  ml-1">END</button>
+        </a>
+
+        {% endif %}
+
+        {% endif %}
     </div>
+
 </div>
 
 
 {% endfor %}
 
 {% else %}
-<p style="text-align: center;">
-    No questions present
-</p>
+
+<div class="px-2 py-2 my-2 text-center">
+    <h2 class="display-5 fw-bold bg-light text-dark">
+        No Groups
+    </h2>
+</div>
 
 {% endif %}
+
+<div class="px-2 py-2 my-2 text-center">
+    <a href="{% url 'polls:add_group' %}" type="button" class="btn btn-primary btn-lg">
+        <i class="bi bi-plus-lg align-middle"></i>
+        Add group
+    </a>
+    
+    <a href="{% url 'polls:edit' %}" type="button" class="btn btn-warning btn-lg">
+        <i class="bi bi-pen-fill align-middle"></i>
+        Edit groups
+    </a>
+</div>
 
 
 {% endblock %}

@@ -1,0 +1,137 @@
+{% extends "home.html" %}
+{% load static %}
+
+{% block style %}
+
+{% endblock style %}
+
+{% block title %}
+Edit {{group.group_name}}
+{% endblock %}
+
+{% block content %}
+
+
+<div>
+
+    <h1 class="px-2 py-2 m-3 display-5 fw-bold bg-light text-dark text-center">
+        Edit {{group.group_name}}
+    </h1>
+
+</div>
+
+<div class="px-2 py-2 my-2 text-center">
+    <a href="{% url 'polls:add_question'  group.group_name %}" type="button" class="btn btn-primary btn-lg">
+        <div class="clearfix">
+            <i class="bi bi-plus-lg align-middle mr-2 float-left text-light"></i>
+            <div class="float-left">
+                Add Question
+            </div>
+        </div>
+    </a>
+</div>
+
+{% if questions %}
+
+{% for q, choices in ques_and_choices.items %}
+
+<div class="container m-0">
+    <div class="row h4" style="margin: 2px 2px 2px 2px;">
+
+        <div class="p-1 bg-light text-dark border rounded">
+            {{forloop.counter}}.{{q.question_text}}
+        </div>
+
+        <a href="{% url 'polls:question_change' group.group_name q.id %}" type="button"
+            class="btn btn-warning ml-1 p-0 px-1">
+            <i class="bi bi-pen"></i>
+        </a>
+
+        <div onclick="delete_question{{forloop.counter}}()" type="button" class="btn btn-danger ml-1 p-0 px-1">
+            <script>
+
+                function delete_question{{forloop.counter}}()
+                {
+                    if(window.confirm('you are about to delete {{q.question_text}}'))
+                    {
+                        window.location.assign("{% url 'polls:question_delete' group.group_name q.id %}");
+                    }
+
+                }
+
+            </script>
+
+            <i class="bi bi-trash"></i>
+
+        </div>
+
+    </div>
+
+    {% for choice in choices %}
+
+    <div class="row m-1 p-1">
+        <div class="col">
+
+            <a type="button" href="{% url 'polls:choice_edit' group.group_name q.id choice.id%}"
+                class="btn btn-warning ml-4">
+                <div class="clearfix">
+                    <i class="bi bi-pen align-middle mr-2 float-left"></i>
+                    <div class="float-left">
+                        {{choice.choice_text}}
+                    </div>
+                </div>                
+            </a>
+
+            <div onclick="delete_choice{{forloop.counter}}()" type="button" class="btn btn-danger ml-1 px-2">
+                <script>
+    
+                    function delete_choice{{forloop.counter}}()
+                    {
+                        if(window.confirm('you are about to delete {{choice.choice_text}}'))
+                        {
+                            window.location.assign("{% url 'polls:choice_delete' group.group_name q.id choice.id %}");
+                        }
+    
+                    }
+    
+                </script>
+    
+                <i class="bi bi-trash align-middle "></i>
+    
+            </div>
+
+        </div>
+    </div>
+
+    {% endfor %}
+
+    <div class="mx-2 my-2 row ">
+        <div class="col ml-4 p-1">
+            <a href="{% url 'polls:add_choice' group.group_name q.id %}" type="button" class="btn btn-info p-2 m-1">
+
+                <div class="clearfix">
+                    <i class="bi bi-plus-lg align-middle mr-2 float-left  text-light"></i>
+                    <div class="float-left">
+                        Add choice
+                    </div>
+                </div>  
+                
+            </a>
+        </div>
+    </div>
+
+</div>
+
+
+{% endfor %}
+
+{% else %}
+<div class="px-2 py-2 my-2 text-center">
+    <h2 class="display-5 fw-bold bg-light text-dark">
+        No questions present
+    </h2>
+</div>
+
+{% endif %}
+
+{% endblock %}

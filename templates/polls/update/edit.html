@@ -1,0 +1,68 @@
+{% extends "home.html" %}
+{% load static %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'style.css' %}">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+{% endblock style %}
+
+{% block title %}
+Edit Groups
+{% endblock %}
+
+{% block content %}
+
+{% if groups %}
+<div class="container">
+
+    <h1 class="px-2 py-2 m-3 display-5 fw-bold bg-light text-dark text-center">
+        Update Poll Groups
+    </h1>
+</div>
+{% for group in groups %}
+
+<div class="container m-0">
+    <div class="row" style="margin: 2px 2px 2px 2px;">
+
+        <a href="{% url 'polls:group_edit' group.group_name %}" type="button" class="btn btn-outline-secondary">
+            {{forloop.counter}}. {{group.group_name}}
+        </a>
+
+        <a href="{% url 'polls:group_rename' group.group_name %}" type="button" class="btn btn-warning ml-1 p-0 px-1">
+
+            <i class="bi bi-pen"></i>
+
+        </a>
+        <div onclick="delete_group()" type="button" class="btn btn-danger ml-1 p-0 px-1">
+            <script>
+
+                function delete_group()
+                {
+                    if(window.confirm('you are about to delete {{group.group_name}}'))
+                    {
+                        window.location.assign("{% url 'polls:group_delete' group.group_name %}");
+                    }
+
+                }
+
+            </script>
+
+            <i class="bi bi-trash"></i>
+
+        </div>
+
+    </div>
+</div>
+
+{% endfor %}
+
+{% else %}
+<p style="text-align: center;" class="text-warning h1">
+    No Groups present
+</p>
+
+{% endif %}
+
+{% endblock %}

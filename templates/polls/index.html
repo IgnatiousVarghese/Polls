@@ -3,88 +3,36 @@
 {% load static %}
 
 {% block style %}
-<link rel="stylesheet" href="{% static 'polls/style.css' %}">
-
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-
-{% endblock style %}
+    <script src="{% static 'js/index.js' %}" deter></script>
+{% endblock %}
 
 {% block content %}
 
-<script>
-    function end_poll(group_name)
-    {
-        if(confirm("Press OK to clear all selected choices"))
-        {
-            window.location = "{% url 'polls:result' group.group_name %}";
-        }
-    }
-    function clear_poll(group_name)
-    {
-        if(confirm("Press OK to clear all selected choices"))
-        {
-            window.location = "{% url 'polls:clear_poll' group.group_name %}";
-        }
-    }
-</script>
-
-{% if votes %}
-
-<h4>
-    You have voted for following quetsions:
-    <span class="counter">
-        {{votes|length}}/{{questions|length}}
-    </span>
-</h4>
-{% for vote in votes %}
-<p>
-    {{forloop.counter}}.{{vote.question}} <span class="choice"> {{vote.choice}} </span>
-</p>
-{% endfor %} {% else %}
-<h4>
-    you haven't voted yet
-</h4>
-{% endif %}
-
-<div class="row">
-    <div class="column main">
-
-        <h4>
-            {{group.group_name}}: 
-
-        </h4>
-        
-        {% if questions %}
-        {% for question in questions %}
-        <p>
-            {{forloop.counter}}. <a class="ques" href="{% url 'polls:detail' group.group_name question.id %}">
-                {{question.question_text}}
-            </a>
-        </p>
-        {% endfor %}
-        <p>
-            <input type="button" value="end poll" onclick="end_poll('{{group.group_name}}')">
-
-            <input type="button" value="clear poll" onclick="clear_poll('{{group.group_name}}')">
-
-        </p>
-            {% else %}
-            <p style="text-align: center;">
-                No questions present
-            </p>
-
-            {% endif %}
+<div class="card m-4 p-2 text-center">
+    <div class="card-header">
+        Your status
     </div>
+    <div class="card-body">
+        <h2 class="card-title">{{group.group_name|capfirst}}</h2>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th scope="row">Number of questions voted</th>
+                    <th scope="row"> Total Number of questions</th>
+                </tr>
+                <tr>
+                    <td>
+                        {{votes|length}}
+                        <img   src="{% static 'images/checked.png' %}" alt="Poll" width="20" height="20">
+            
+                    </td>
+                    <td>{{questions|length}}</td>
+                </tr>
+            </tbody>
+        </table>
 
-    <div class="column side">
-        <div class="row">
-            {% for question in questions %}
-            <div class="colum_side_box">
-                <a href="{% url 'polls:detail' group.group_name question.id %}">{{forloop.counter}}
-                    <!--.{{question.question_text}}--></a>
-            </div>
-            {% endfor %}
-        </div>
+        <a href="{% url 'polls:detail' group.group_name 0 %}" class="btn btn-primary">Start</a>
     </div>
 </div>
+
 {% endblock %}
