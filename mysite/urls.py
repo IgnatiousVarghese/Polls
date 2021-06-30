@@ -9,4 +9,5 @@ urlpatterns = [
     path('check/' , views.check, name = 'check'),
     path('poll/', include('polls.urls'), name = 'polls'),
     path('accounts/', include('accounts.urls'), name = 'accounts'),
+    path('tasks/' , include('tasks.urls'), name = 'tasks'),
 ]

@@ -1,0 +1,92 @@
+{% extends "home.html" %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+
+<style>
+    input {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        box-sizing: border-box;
+    }
+
+
+
+    .center-column {
+        width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        border-radius: 3px;
+        box-shadow: 6px 2px 30px 0px rgba(0, 0, 0, 0.75);
+    }
+
+    .item-row {
+        margin: 10px;
+        padding: 20px;
+        border-radius: 3px;
+        font-size: 16px;
+        box-shadow: 0px -1px 10px -4px rgba(0, 0, 0, 0.75);
+    }
+</style>
+
+{% block content1 %}
+<div class="center-column bg-light">
+
+    <form method="POST" action="/tasks/">
+        {% csrf_token %} {{form}}
+        <input class="btn btn-info" type="submit" value="Create Task">
+    </form>
+</div>
+<div class="center-column bg-light">
+    <div class="todo-list">
+        {% if not user.is_authenticated %}
+
+        <div class="item-row text-center h1">
+            ANY ONE CAN EDIT THESE TASKS
+        </div>
+
+        {% endif %}
+
+        {% for task in tasks %}
+
+        <div id="task{{ forloop.counter }}" class="item-row border border-5">
+            
+            <div class="text-center h3">
+                {{task|capfirst}}
+                {% if task.completed == True %}
+                <img   src="{% static 'images/checked.png' %}" alt="Completed" width="20" height="20">
+                {% endif %}
+            </div>
+            <div class="item-row text-center ">
+                {{task.desc}}
+            </div>
+            <pre>started on :  {{task.date}}</pre>
+
+            {% if task.completed == True %}
+            <script>
+                var x = document.getElementById("task{{ forloop.counter }}").className += " border-success";
+            </script>
+
+            {% else %}
+            <script>
+                var x = document.getElementById("task{{ forloop.counter }}").className += " border-warning bg-warning";
+            </script>
+            {% endif %}
+            <a class="btn btn-sm btn-info" href="{% url 'tasks:update_task' task.id %}">Update</a>
+            <a class="btn btn-sm btn-danger" href="{% url 'tasks:delete_task' task.id %}">Delete</a>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% endblock %}
+<div>
+</div>

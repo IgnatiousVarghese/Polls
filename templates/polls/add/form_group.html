@@ -1,8 +1,12 @@
-<form action="{% url 'polls:add_group' %}" method="post">
+{% extends 'base_form.html' %}
 
-    {% csrf_token %}
+{% block form %}
+    <form action="{% url 'polls:add_group' %}" method="post">
 
-    {{form}}
+        {% csrf_token %}
 
-    <button type="submit">submit</button>
-</form>
+        {{form}}
+        
+        <button type="submit" class="btn btn-primary">submit</button>
+    </form>
+{% endblock form %}

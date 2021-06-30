@@ -365,7 +365,6 @@ def vote(request, group_name, question_id):
         try:
             choice_id = request.POST['choice']
             choice = question.choice_set.get(id=choice_id)
-            choice.votes += 1
             choice.save()
 
             vote = Vote()

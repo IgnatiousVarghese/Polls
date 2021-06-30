@@ -37,7 +37,7 @@ def seed_users(num_entries=10, overwrite=False):
     print()
 
 
-def seed_groups(num_entries=6, q_min=2, q_max=4, choice_min=5, choice_max=7, overwrite=False):
+def seed_groups(num_entries=6, q_min=3, q_max=4, choice_min=3, choice_max=4, overwrite=False):
     """
     Seeds num_entries poll with random users as owners
     Each poll will be seeded with # choices from choice_min to choice_max
@@ -50,10 +50,10 @@ def seed_groups(num_entries=6, q_min=2, q_max=4, choice_min=5, choice_max=7, ove
     users = list(User.objects.all())
     count = 0
     for _ in range(num_entries):
-        owner = random.choice(users),
+        owner = random.choice(users)
         g = Questiongroup(
-            owner=owner[0],
-            group_name=f"{owner[0].username}_{random.randint(0,100)}",
+            owner=owner,
+            group_name=f"{owner.username}_{owner.questiongroup_set.all().count()}",
         )
         g.save()
 
@@ -107,9 +107,11 @@ def seed_votes():
     users = User.objects.all()
     groups = Questiongroup.objects.all()
 
+    count = 0
+    total_user_count = users.count()
     for user in users:
+        count += 1
         for g in groups:
-            count = 0
             g.total_count += 1
             g.save()
             user_voted = Users_voted(
@@ -120,7 +122,6 @@ def seed_votes():
 
             questions = g.question_set.all()
 
-            number_of_new_votes = questions.count() 
 
             for q in questions:
                 choices = q.choice_set.all()
@@ -133,16 +134,15 @@ def seed_votes():
                         question=q,
                         group=g,
                     )
-                vote.save()
-                count += 1
-                percent_complete = count / number_of_new_votes * 100
-                print(
-                    "Adding {} new votes to {}: {:.2f}%".format(
-                        number_of_new_votes, g.group_name, percent_complete),
-                    end='\r',
-                    flush=True
-                )
-            print()
+                    vote.save()
+        percent_complete = count / total_user_count * 100
+        print(
+            "_________Added new votes for {}: {:.2f}%_________".format(
+                user.username, percent_complete),
+            end='\r',
+            flush=True
+        )
+    print()
 
 
 

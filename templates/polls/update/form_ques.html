@@ -1,8 +1,12 @@
+{% extends 'base_form.html' %}
+
+{% block form %}
 <form action="{% url 'polls:question_change' group_name q_id %}" method="post">
 
     {% csrf_token %}
 
-    {{form}}
+    {{ form }}
 
-    <button type="submit">submit</button>
+    <button type="submit" class="btn btn-primary">submit</button>
 </form>
+{% endblock form %}
